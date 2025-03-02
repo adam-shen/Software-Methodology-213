@@ -47,7 +47,49 @@ public class Board {
 
     public boolean movePiece(String move) { // Add this to parameter when Neer makes it , Rules rule
 
-        return false;
+        String parts[] = move.split(" "); // Assume move is something like "e2 e4"
+
+        if (parts.length != 2) {
+            return false; // Invalid move format
+        }
+
+        String src = parts[0];
+        String dest = parts[1];
+
+        int srcCol = (src.charAt(0) - 'a');
+        int srcRow = (src.charAt(1) - '0');
+        int destCol = (dest.charAt(0) - 'a');
+        int destRow = (dest.charAt(1) - '0');
+
+        Piece piece = grid[srcRow][srcCol];
+
+        if (piece == null) {
+            // No piece at source.
+            return false;
+        }
+
+        if (piece.getColor() != currentPlayer) {
+            return false; // Not this player's turn
+        }
+
+        // Validate move with piece's own logic, board, and additional rules
+        if (!piece.isValidMove(dest, this)) { // Add rules to parameter when ....
+            return false;
+        }
+
+        if (grid[destRow][destCol] != null && grid[destRow][destCol].getColor() == piece.getColor()) {
+            return false; // Can't capture your own piece
+        }
+
+        grid[destRow][destCol] = piece;
+        grid[srcRow][srcCol] = null;
+        // piece.setPosition(dest); Not sure how Neer's implementing but yeah could do
+        // this
+
+        // After successful move
+        currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+
+        return true;
     }
 
 }
