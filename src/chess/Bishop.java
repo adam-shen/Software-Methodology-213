@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Bishop extends Piece {
 
     public Bishop(Position position, Color color) {
-        super(position, color);
+        super(color,position);
     }
 
     @Override
