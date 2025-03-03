@@ -39,6 +39,12 @@ public class Pawn extends Piece {
             }
         }
 
+        // Log the legal moves for debugging
+        System.out.println("Legal moves for pawn at (" + position.getRow() + ", " + position.getCol() + "):");
+        for (Position pos : moves) {
+            System.out.println("(" + pos.getRow() + ", " + pos.getCol() + ")");
+        }
+
         // Note: En passant is handled in the Rules class.
         return moves;
     }
