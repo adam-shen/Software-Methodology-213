@@ -17,12 +17,14 @@ public class King extends Piece {
         for (int i = 0; i < rowOffsets.length; i++) {
             int newRow = position.getRow() + rowOffsets[i];
             int newCol = position.getCol() + colOffsets[i];
+            // Check bounds before creating a Position object
+            if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
+                continue;
+            }
             Position newPos = new Position(newRow, newCol);
-            if (inBounds(newPos)) {
-                // The king can move if the target is empty or holds an enemy piece.
-                if (board.isEmpty(newRow, newCol) || board.getPiece(newRow, newCol).getColor() != this.color) {
-                    moves.add(newPos);
-                }
+            // The king can move if the target is empty or holds an enemy piece.
+            if (board.isEmpty(newRow, newCol) || board.getPiece(newRow, newCol).getColor() != this.color) {
+                moves.add(newPos);
             }
         }
         // Note: Castling is handled in the Rules class.

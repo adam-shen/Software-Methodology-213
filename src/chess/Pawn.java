@@ -18,12 +18,12 @@ public class Pawn extends Piece {
 
         // Single square forward.
         Position forward = new Position(position.getRow() + direction, position.getCol());
-        if (inBounds(forward) && board.isEmpty(forward.getRow(), forward.getRow())) {
+        if (inBounds(forward) && board.isEmpty(forward.getRow(), forward.getCol())) {
             moves.add(forward);
 
             // Two squares forward from the starting row.
             Position doubleForward = new Position(position.getRow() + 2 * direction, position.getCol());
-            if (position.getRow() == startRow && board.isEmpty(doubleForward.getRow(), doubleForward.getRow())) {
+            if (position.getRow() == startRow && board.isEmpty(doubleForward.getRow(), doubleForward.getCol())) {
                 moves.add(doubleForward);
             }
         }

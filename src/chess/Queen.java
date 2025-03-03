@@ -20,9 +20,11 @@ public class Queen extends Piece {
             while (true) {
                 newRow += rowDirs[i];
                 newCol += colDirs[i];
-                Position newPos = new Position(newRow, newCol);
-                if (!inBounds(newPos))
+                // Check bounds before creating the Position object.
+                if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
                     break;
+                }
+                Position newPos = new Position(newRow, newCol);
                 if (board.isEmpty(newRow, newCol)) {
                     moves.add(newPos);
                 } else {
