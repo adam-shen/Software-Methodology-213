@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
 
-    public Bishop(Color color, Position position) {
-        super(color, position);
+    public Bishop(Position position, Color color) {
+        super(position, color);
     }
-    
+
     @Override
     public ArrayList<Position> getLegalMoves(Board board) {
         ArrayList<Position> moves = new ArrayList<>();
-        int[] rowDirs = {-1, -1, 1, 1};
-        int[] colDirs = {-1, 1, -1, 1};
-        
+        int[] rowDirs = { -1, -1, 1, 1 };
+        int[] colDirs = { -1, 1, -1, 1 };
+
         for (int i = 0; i < rowDirs.length; i++) {
             int newRow = position.getRow();
             int newCol = position.getCol();
@@ -21,11 +21,12 @@ public class Bishop extends Piece {
                 newRow += rowDirs[i];
                 newCol += colDirs[i];
                 Position newPos = new Position(newRow, newCol);
-                if (!inBounds(newPos)) break;
-                if (board.isEmpty(newPos)) {
+                if (!inBounds(newPos))
+                    break;
+                if (board.isEmpty(newRow, newCol)) {
                     moves.add(newPos);
                 } else {
-                    if (board.getPiece(newPos).getColor() != this.color) {
+                    if (board.getPiece(newRow, newCol).getColor() != this.color) {
                         moves.add(newPos);
                     }
                     break;
@@ -34,16 +35,16 @@ public class Bishop extends Piece {
         }
         return moves;
     }
-    
+
     private boolean inBounds(Position pos) {
         return pos.getRow() >= 0 && pos.getRow() < 8 && pos.getCol() >= 0 && pos.getCol() < 8;
     }
-    
+
     @Override
     public Piece copy() {
-        return new Bishop(this.color, new Position(this.position.getRow(), this.position.getCol()));
+        return new Bishop(new Position(this.position.getRow(), this.position.getCol()), this.color);
     }
-    
+
     @Override
     public String toString() {
         return (color == Color.WHITE) ? "wB" : "bB";
