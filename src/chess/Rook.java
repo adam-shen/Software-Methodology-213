@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Rook extends Piece {
 
     public Rook(Position position, Color color) {
-        super(position, color);
+        super(color,position);
     }
 
     @Override
