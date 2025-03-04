@@ -2,10 +2,11 @@ package chess;
 
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Cloneable {
 
     private Piece[][] grid = new Piece[8][8];
     private Color currentPlayer;
+    public Pawn advPawn;
 
     public Board() {
         currentPlayer = Color.WHITE;
@@ -67,9 +68,10 @@ public class Board {
 
         String parts[] = move.split(" "); // Assume move is something like "e2 e4"
 
-        if (parts.length != 2) {
+        if (parts.length != 2 && parts.length != 3) {
             return false; // Invalid move format
         }
+        boolean pawnPromotion = parts.length == 3;
 
         String src = parts[0];
         String dest = parts[1];
@@ -79,8 +81,8 @@ public class Board {
         int destCol = (dest.charAt(0) - 'a');
         int destRow = 8 - (dest.charAt(1) - '0');
 
-        System.out.println("Source position: (" + srcRow + ", " + srcCol + ")");
-        System.out.println("Destination position: (" + destRow + ", " + destCol + ")");
+//        System.out.println("Source position: (" + srcRow + ", " + srcCol + ")");
+//        System.out.println("Destination position: (" + destRow + ", " + destCol + ")");
 
         Piece piece = grid[srcRow][srcCol];
 
@@ -92,20 +94,45 @@ public class Board {
         if (piece.getColor() != currentPlayer) {
             return false; // Not this player's turn
         }
-
-        // Validate move with piece's own logic, board, and additional rules
-        if (piece.getLegalMoves(this).isEmpty()) {
-            return false;
+        
+        Position destPos = new Position(destRow, destCol);
+        
+        // Get the legal moves for the piece.
+        ArrayList<Position> legalMoves = piece.getLegalMoves(this);
+        
+        // Check if the destination is a legal move.
+        if (!legalMoves.contains(destPos)) {
+            return false; // The move is not allowed.
         }
+        // Validate move with piece's own logic, board, and additional rules
 
         if (grid[destRow][destCol] != null && grid[destRow][destCol].getColor() == piece.getColor()) {
             return false; // Can't capture your own piece
         }
 
-        grid[destRow][destCol] = piece;
+        if(pawnPromotion) {
+            // Replace the pawn with the promoted piece based on the promotion token.
+            switch(parts[2].toUpperCase())  {
+                case "N":
+                    grid[destRow][destCol] = new Knight(new Position(destRow, destCol), piece.getColor());
+                    break;
+                case "B":
+                    grid[destRow][destCol] = new Bishop(new Position(destRow, destCol), piece.getColor());
+                    break;
+                case "R":
+                    grid[destRow][destCol] = new Rook(new Position(destRow, destCol), piece.getColor());
+                    break;
+                default:
+                    grid[destRow][destCol] = new Queen(new Position(destRow, destCol), piece.getColor());
+                    break;
+            }
+        } else {
+            // Normal move: place the piece at the destination.
+            grid[destRow][destCol] = piece;
+        }
         grid[srcRow][srcCol] = null;
-        // piece.setPosition(dest); Not sure how Neer's implementing but yeah could do
-        // this
+        piece.setPosition(destPos);
+
 
         // After successful move
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -213,5 +240,18 @@ public class Board {
         }
         return piecesList;
     }
+    
+    public Pawn getDoublePawn() {
+    	return advPawn;
+    }
+    
+    public void setDoublePawn(Pawn pawn) {
+  this.advPawn = pawn;
+    }
+    
+    public void setPiece(Position pos, Piece piece) {
+        grid[pos.getRow()][pos.getCol()] = piece;
+    }
+
 
 } // Might need to handle if they put draw or something
