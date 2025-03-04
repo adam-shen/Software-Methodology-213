@@ -5,7 +5,6 @@ public class Chess {
     private static Board board;
     private static Rules rules;
     private static Color currentPlayer;
-    private static boolean gameOver;
 
     enum Player {
         white, black
@@ -22,17 +21,11 @@ public class Chess {
      *         the contents of the returned ReturnPlay instance.
      */
     public static ReturnPlay play(String move) {
+    	
 
         ReturnPlay result = new ReturnPlay();
 
         move = move.trim();
-
-        if (gameOver) {
-            result.piecesOnBoard = board.getReturnPieces();
-            // You could choose to print the winning message here (or use the previous one).
-            // For example, if gameOver is true, the message is already set.
-            return result;
-        }
 
         // Handle resigning.
         if (move.equals("resign")) {
@@ -41,7 +34,6 @@ public class Chess {
             result.message = (currentPlayer == Color.WHITE)
                     ? ReturnPlay.Message.RESIGN_BLACK_WINS
                     : ReturnPlay.Message.RESIGN_WHITE_WINS;
-            gameOver = true; // Set gameOver to true when a player resigns
             return result;
         }
 
@@ -50,7 +42,8 @@ public class Chess {
             // Remove the "draw?" part from the move string.
             move = move.replace("draw?", "").trim();
         }
-
+        
+        
         String[] tokens = move.split("\\s+");
         if (tokens.length < 2) {
             result.piecesOnBoard = board.getReturnPieces();
@@ -80,6 +73,8 @@ public class Chess {
             result.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return result;
         }
+        
+  
 
         // -------- CASTLING DETECTION --------
         // If the moving piece is a King and the horizontal move is 2 squares,
@@ -139,6 +134,13 @@ public class Chess {
             result.piecesOnBoard = board.getReturnPieces();
             return result;
         }
+        
+        Board simulated = board.simulateMove(piece, destPos);
+        if (Rules.isInCheck(currentPlayer, simulated)) {
+            result.piecesOnBoard = board.getReturnPieces();
+            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return result;
+        }
         // Attempt to move the piece.
         // The movePiece method (to be implemented in Board) should:
         // - Parse the move string into source and destination positions.
@@ -157,28 +159,31 @@ public class Chess {
 
         // Check game state: e.g., check, checkmate, draw, etc.
         // (Implement these methods in your Rules class as needed.)
+        Color playerWhoJustMoved = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE; // since movePiece switched already
+
         if (rules.isCheckmate(currentPlayer, board)) {
-            // The winning message is based on which player just moved.
-            result.message = (currentPlayer == Color.WHITE)
+            // currentPlayer is the one who is about to move and is checkmated,
+            // so the playerWhoJustMoved wins.
+            result.message = (playerWhoJustMoved == Color.WHITE)
                     ? ReturnPlay.Message.CHECKMATE_WHITE_WINS
                     : ReturnPlay.Message.CHECKMATE_BLACK_WINS;
         } else if (rules.isInCheck(currentPlayer, board)) {
             result.message = ReturnPlay.Message.CHECK;
         }
-
         // After a successful move, if a draw was requested, override the message.
         if (drawRequested) {
             result.message = ReturnPlay.Message.DRAW;
-            gameOver = true; // Set gameOver to true when a draw is requested and accepted
         }
 
+       
         // After a valid move, switch the turn to the other player.
         switchPlayer();
 
         // Update the board state in the ReturnPlay object.
         result.piecesOnBoard = board.getReturnPieces();
         return result;
-
+        
+        
     }
 
     /**
@@ -189,11 +194,12 @@ public class Chess {
         board.initialize();
         rules = new Rules();
         currentPlayer = Color.WHITE;
-        gameOver = false;
+
     }
 
     private static void switchPlayer() {
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
-
+    
+    
 }
