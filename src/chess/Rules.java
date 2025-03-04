@@ -25,17 +25,49 @@ public class Rules {
         return true;
     }
 
-    public static boolean canEnPassant(Pawn pawn, Pawn targetPawn, Board board) {
-        return false;
+    public static boolean canEnPassant(Pawn pawn, Position targetPawn, Board board) {
+    	Pawn doublePawn = board.advPawn;
+    	if (doublePawn == null) {
+    		return false;
+    	}
+        if(doublePawn.getColor() == pawn.getColor()) {
+        	return false;
+        }
+        
+        int capturingFile = pawn.getPosition().getCol();
+        int doublePawnFile = doublePawn.getPosition().getCol();
+        if(Math.abs(capturingFile - doublePawnFile)!= 1) {
+        	return false;
+        }
+        
+        int capturingRow = pawn.getPosition().getRow();
+        if(pawn.getColor() == Color.WHITE && capturingRow != 3) {
+        	return false;
+        }
+        if(pawn.getColor() == Color.BLACK && capturingRow != 4) {
+        	return false;
+        }
+        int TarRow = (doublePawn.getColor() == Color.BLACK) ? 2 : 5;
+        int TarCol = doublePawn.getPosition().getCol();
+        Position expTar = new Position(TarRow,TarCol);
+        
+        return targetPawn.equals(expTar);
+        
     }
 
     public static boolean isInCheck(Color player, Board board) {
         King king = findKing(player, board);
-        if (king == null)
+        if (king == null) {
+            // Should not happen if the king is always on the board.
             return false;
+        }
+        Position kingPos = king.getPosition();
+        // Check every opponent piece.
         for (Piece piece : board.getAllPieces()) {
             if (piece.getColor() != player) {
-                if (piece.getLegalMoves(board).contains(king.getPosition())) {
+                // Debug print: Uncomment for troubleshooting.
+                // System.out.println("Checking moves for piece " + piece + " for king at " + kingPos);
+                if (piece.getLegalMoves(board).contains(kingPos)) {
                     return true;
                 }
             }
@@ -44,18 +76,36 @@ public class Rules {
     }
 
     public static boolean isCheckmate(Color player, Board board) {
-        if (!isInCheck(player, board))
+        // If the king is not in check, it's not checkmate.
+        if (!isInCheck(player, board)) {
             return false;
+        }
+        // Try every legal move for each piece of the player.
         for (Piece piece : board.getAllPieces()) {
             if (piece.getColor() == player) {
                 for (Position move : piece.getLegalMoves(board)) {
+                    // Simulate the move.
                     Board simulated = board.simulateMove(piece, move);
-                    if (!isInCheck(player, simulated))
+                    // If this move gets the king out of check, it's not checkmate.
+                    if (!isInCheck(player, simulated)) {
+                        // Debug print: Uncomment to see which move escapes check.
+                        // System.out.println("Escape move for " + piece + " to " + move);
                         return false;
+                    }
                 }
             }
         }
         return true;
+    }
+    
+    public static Piece Promotion(Pawn pawn, String letter, Position pos) {
+    	switch(letter.toUpperCase())  {
+    	case "N" : return new Knight(pos, pawn.getColor());
+    	case "B" : return new Bishop(pos, pawn.getColor());
+    	case "R" : return new Rook(pos, pawn.getColor());
+    		default: return new Queen(pos, pawn.getColor());
+
+    	}
     }
 
     // Helper method
