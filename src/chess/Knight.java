@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Knight extends Piece {
 
     public Knight(Position position, Color color) {
-        super(position, color);
+        super(color,position);
     }
 
     @Override
@@ -27,10 +27,10 @@ public class Knight extends Piece {
         }
 
         // Log the legal moves for debugging
-        System.out.println("Legal moves for knight at (" + position.getRow() + ", " + position.getCol() + "):");
-        for (Position pos : moves) {
-            System.out.println("(" + pos.getRow() + ", " + pos.getCol() + ")");
-        }
+//        System.out.println("Legal moves for knight at (" + position.getRow() + ", " + position.getCol() + "):");
+//        for (Position pos : moves) {
+//            System.out.println("(" + pos.getRow() + ", " + pos.getCol() + ")");
+//        }
 
         return moves;
     }
