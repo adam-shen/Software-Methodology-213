@@ -2,39 +2,66 @@ package chess;
 
 import java.util.ArrayList;
 
-public class Queen extends Piece {
+public class Rook extends Piece {
 
-    public Queen(Position position, Color color) {
+    public Rook(Position position, Color color) {
         super(color,position);
     }
 
     @Override
     public ArrayList<Position> getLegalMoves(Board board) {
         ArrayList<Position> moves = new ArrayList<>();
-        int[] rowDirs = { -1, -1, -1, 0, 0, 1, 1, 1 };
-        int[] colDirs = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-        for (int i = 0; i < rowDirs.length; i++) {
-            int newRow = position.getRow();
-            int newCol = position.getCol();
-            while (true) {
-                newRow += rowDirs[i];
-                newCol += colDirs[i];
-                // Check bounds before creating the Position object.
-                if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) {
-                    break;
+        // Upward moves
+        for (int r = position.getRow() - 1; r >= 0; r--) {
+            // Check the cell first before creating a Position
+            if (board.isEmpty(r, position.getCol())) {
+                moves.add(new Position(r, position.getCol()));
+            } else {
+                // Add capture move if the piece is of opposite color, then stop.
+                if (board.getPiece(r, position.getCol()).getColor() != this.color) {
+                    moves.add(new Position(r, position.getCol()));
                 }
-                Position newPos = new Position(newRow, newCol);
-                if (board.isEmpty(newRow, newCol)) {
-                    moves.add(newPos);
-                } else {
-                    if (board.getPiece(newRow, newCol).getColor() != this.color) {
-                        moves.add(newPos);
-                    }
-                    break;
-                }
+                break;
             }
         }
+
+        // Downward moves
+        for (int r = position.getRow() + 1; r < 8; r++) {
+            if (board.isEmpty(r, position.getCol())) {
+                moves.add(new Position(r, position.getCol()));
+            } else {
+                if (board.getPiece(r, position.getCol()).getColor() != this.color) {
+                    moves.add(new Position(r, position.getCol()));
+                }
+                break;
+            }
+        }
+
+        // Leftward moves
+        for (int c = position.getCol() - 1; c >= 0; c--) {
+            if (board.isEmpty(position.getRow(), c)) {
+                moves.add(new Position(position.getRow(), c));
+            } else {
+                if (board.getPiece(position.getRow(), c).getColor() != this.color) {
+                    moves.add(new Position(position.getRow(), c));
+                }
+                break;
+            }
+        }
+
+        // Rightward moves
+        for (int c = position.getCol() + 1; c < 8; c++) {
+            if (board.isEmpty(position.getRow(), c)) {
+                moves.add(new Position(position.getRow(), c));
+            } else {
+                if (board.getPiece(position.getRow(), c).getColor() != this.color) {
+                    moves.add(new Position(position.getRow(), c));
+                }
+                break;
+            }
+        }
+
         return moves;
     }
 
@@ -44,11 +71,11 @@ public class Queen extends Piece {
 
     @Override
     public Piece copy() {
-        return new Queen(new Position(this.position.getRow(), this.position.getCol()), this.color);
+        return new Rook(new Position(this.position.getRow(), this.position.getCol()), this.color);
     }
 
     @Override
     public String toString() {
-        return (color == Color.WHITE) ? "wQ" : "bQ";
+        return (color == Color.WHITE) ? "wR" : "bR";
     }
 }
