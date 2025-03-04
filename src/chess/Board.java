@@ -81,8 +81,9 @@ public class Board implements Cloneable {
         int destCol = (dest.charAt(0) - 'a');
         int destRow = 8 - (dest.charAt(1) - '0');
 
-//        System.out.println("Source position: (" + srcRow + ", " + srcCol + ")");
-//        System.out.println("Destination position: (" + destRow + ", " + destCol + ")");
+        // System.out.println("Source position: (" + srcRow + ", " + srcCol + ")");
+        // System.out.println("Destination position: (" + destRow + ", " + destCol +
+        // ")");
 
         Piece piece = grid[srcRow][srcCol];
 
@@ -94,12 +95,12 @@ public class Board implements Cloneable {
         if (piece.getColor() != currentPlayer) {
             return false; // Not this player's turn
         }
-        
+
         Position destPos = new Position(destRow, destCol);
-        
+
         // Get the legal moves for the piece.
         ArrayList<Position> legalMoves = piece.getLegalMoves(this);
-        
+
         // Check if the destination is a legal move.
         if (!legalMoves.contains(destPos)) {
             return false; // The move is not allowed.
@@ -110,9 +111,17 @@ public class Board implements Cloneable {
             return false; // Can't capture your own piece
         }
 
-        if(pawnPromotion) {
+        // Handle en passant capture
+        if (piece instanceof Pawn && Math.abs(destRow - srcRow) == 1 && Math.abs(destCol - srcCol) == 1
+                && grid[destRow][destCol] == null) {
+            // En passant capture
+            int capturedPawnRow = (piece.getColor() == Color.WHITE) ? destRow + 1 : destRow - 1;
+            grid[capturedPawnRow][destCol] = null;
+        }
+
+        if (pawnPromotion) {
             // Replace the pawn with the promoted piece based on the promotion token.
-            switch(parts[2].toUpperCase())  {
+            switch (parts[2].toUpperCase()) {
                 case "N":
                     grid[destRow][destCol] = new Knight(new Position(destRow, destCol), piece.getColor());
                     break;
@@ -133,6 +142,12 @@ public class Board implements Cloneable {
         grid[srcRow][srcCol] = null;
         piece.setPosition(destPos);
 
+        // Update the advanced pawn for en passant
+        if (piece instanceof Pawn && Math.abs(destRow - srcRow) == 2) {
+            advPawn = (Pawn) piece;
+        } else {
+            advPawn = null;
+        }
 
         // After successful move
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
@@ -240,18 +255,17 @@ public class Board implements Cloneable {
         }
         return piecesList;
     }
-    
+
     public Pawn getDoublePawn() {
-    	return advPawn;
+        return advPawn;
     }
-    
+
     public void setDoublePawn(Pawn pawn) {
-  this.advPawn = pawn;
+        this.advPawn = pawn;
     }
-    
+
     public void setPiece(Position pos, Piece piece) {
         grid[pos.getRow()][pos.getCol()] = piece;
     }
-
 
 } // Might need to handle if they put draw or something
