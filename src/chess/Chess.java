@@ -5,6 +5,7 @@ public class Chess {
     private static Board board;
     private static Rules rules;
     private static Color currentPlayer;
+    private static boolean gameOver;
 
     enum Player {
         white, black
@@ -21,11 +22,17 @@ public class Chess {
      *         the contents of the returned ReturnPlay instance.
      */
     public static ReturnPlay play(String move) {
-    	
 
         ReturnPlay result = new ReturnPlay();
 
         move = move.trim();
+
+        if (gameOver) {
+            result.piecesOnBoard = board.getReturnPieces();
+            // You could choose to print the winning message here (or use the previous one).
+            // For example, if gameOver is true, the message is already set.
+            return result;
+        }
 
         // Handle resigning.
         if (move.equals("resign")) {
@@ -34,6 +41,7 @@ public class Chess {
             result.message = (currentPlayer == Color.WHITE)
                     ? ReturnPlay.Message.RESIGN_BLACK_WINS
                     : ReturnPlay.Message.RESIGN_WHITE_WINS;
+            gameOver = true; // Set gameOver to true when a player resigns
             return result;
         }
 
@@ -42,8 +50,7 @@ public class Chess {
             // Remove the "draw?" part from the move string.
             move = move.replace("draw?", "").trim();
         }
-        
-        
+
         String[] tokens = move.split("\\s+");
         if (tokens.length < 2) {
             result.piecesOnBoard = board.getReturnPieces();
@@ -162,17 +169,16 @@ public class Chess {
         // After a successful move, if a draw was requested, override the message.
         if (drawRequested) {
             result.message = ReturnPlay.Message.DRAW;
+            gameOver = true; // Set gameOver to true when a draw is requested and accepted
         }
 
-       
         // After a valid move, switch the turn to the other player.
         switchPlayer();
 
         // Update the board state in the ReturnPlay object.
         result.piecesOnBoard = board.getReturnPieces();
         return result;
-        
-        
+
     }
 
     /**
@@ -183,12 +189,11 @@ public class Chess {
         board.initialize();
         rules = new Rules();
         currentPlayer = Color.WHITE;
-
+        gameOver = false;
     }
 
     private static void switchPlayer() {
         currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
     }
-    
-    
+
 }
