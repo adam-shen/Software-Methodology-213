@@ -1,0 +1,144 @@
+CS 213 Spring 2025 - CHESS ASSIGNMENT GRADE REPORT
+
+**** PAWN  ****
+
+1. Result board is correct: 1 pt
+2. Result board is correct: 1 pt
+3. Result board is correct: 1 pt
+4. Result board is correct: 2 pt
+5. Result board is correct: 3 pt
+
+Score: 8/8
+
+**** ROOK  ****
+
+1. Result board is correct: 1 pt
+2. Result board is correct: 1 pt
+3. Result board is correct: 1 pt
+4. Result board is correct: 1 pt
+5. Result board is correct: 2 pt
+6. Result board is correct: 3 pt
+
+Score: 9/9
+
+**** BISHOP  ****
+
+1. Result board is correct: 2 pt
+2. Result board is correct: 2 pt
+3. Result board is correct: 3 pt
+4. Result board is correct: 3 pt
+
+Score: 10/10
+
+**** KNIGHT  ****
+
+1. Result board is correct: 1 pt
+2. Result board is correct: 1 pt
+3. Result board is correct: 2 pt
+4. Result board is correct: 2 pt
+5. Result board is correct: 3 pt
+6. Result board is correct: 3 pt
+
+Score: 12/12
+
+**** KING  ****
+
+1. Result board is correct: 1 pt
+2. Result board is correct: 1 pt
+3. Result board is correct: 1 pt
+4. Result board is correct: 1 pt
+5. Result board is correct: 1 pt
+6. Result board is correct: 1 pt
+
+Score: 6/6
+
+**** QUEEN  ****
+
+1. Result board is correct: 2 pt
+2. Result board is correct: 2 pt
+3. Result board is correct: 3 pt
+4. Result board is correct: 4 pt
+
+Score: 11/11
+
+**** CASTLING  ****
+
+1. Result board is correct: 3 pt
+2. Result board is correct: 2 pt
+3. Result board is correct: 2 pt
+4. Result board is correct: 3 pt
+
+Score: 10/10
+
+**** EN PASSANT  ****
+
+1. Result board is correct: 3 pt
+2. Result board is correct: 3 pt
+
+Score: 6/6
+
+**** PROMOTION  ****
+
+1. Result board is incorrect: 0/3 pt
+2. Result board is correct: 3 pt
+
+Score: 3/6
+
+**** COMBINATIONS  ****
+
+1. Result board is correct: 2 pt
+2. Result board is correct: 2 pt
+3. Result board is correct: 3 pt
+4. Result board is correct: 2 pt
+5. Result board is correct: 2 pt
+6. Result board is correct: 1 pt
+
+Score: 12/12
+
+**** CHECK  ****
+
+1. Result board is correct: 1 pt, Result message is incorrect: 0/2 pt
+2. Result board is correct: 2 pt, Result message is incorrect: 0/2 pt
+3. Result board is correct: 2 pt, Result message is incorrect: 0/2 pt
+4. Result board is correct: 2 pt, Result message is incorrect: 0/2 pt
+
+Score: 7/15
+
+**** ILLEGAL MOVE  ****
+
+1. Result board is correct: 1 pt, Result message is correct: 1 pt
+2. Result board is correct: 1 pt, Result message is correct: 1 pt
+3. Result board is correct: 1 pt, Result message is correct: 1 pt
+4. Result board is correct: 1 pt, Result message is correct: 1 pt
+5. Result board is correct: 1 pt, Result message is correct: 1 pt
+6. Result board is incorrect: 0/1 pt
+7. Result board is correct: 1 pt, Result message is correct: 2 pt
+8. Result board is correct: 1 pt, Result message is correct: 2 pt
+
+Score: 16/20
+
+**** CHECKMATE  ****
+
+1. Result board is correct: 1 pt, Result message is incorrect: 0/3 pt
+2. Result board is correct: 1 pt, Result message is incorrect: 0/3 pt
+3. Result board is correct: 1 pt, Result message is incorrect: 0/3 pt
+
+Score: 3/12
+
+**** RESIGN  ****
+
+1. Result board is correct: 1 pt, Result message is correct: 1 pt
+2. Result board is correct: 1 pt, Result message is correct: 1 pt
+
+Score: 4/4
+
+**** DRAW  ****
+
+1. Result board is correct: 1 pt, Result message is correct: 1 pt
+2. Result board is correct: 1 pt, Result message is correct: 1 pt
+
+Score: 4/4
+
+---------------------------
+
+Total Points = 121/145
